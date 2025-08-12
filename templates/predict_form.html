@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cirrhosis Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .logout-link {
+            background-color: #D4AF37;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .logout-link:hover {
+            background-color: #B8860B;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="position: absolute; top: 20px; right: 20px;">
+             <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
+        </div>
+
+        <h1 class="page-title">
+            <img src="{{ url_for('static', filename='images/doctor_icon.png') }}" alt="Doctor Icon" class="title-icon">
+            Cirrhosis Health Status Prediction
+        </h1>
+        
+        <form action="{{ url_for('predict') }}" method="post" class="prediction-form">
+            {% if form_data %}
+                {% for key, value in form_data.items() %}
+                    <input type="hidden" name="{{ key }}" value="{{ value }}">
+                {% endfor %}
+            {% endif %}
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="N_Days">N_Days (Number of days since diagnosis):</label>
+                    <input type="number" id="N_Days" name="N_Days" required value="{{ form_data.N_Days if form_data else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="Drug">Drug:</label>
+                    <select id="Drug" name="Drug" required>
+                        <option value="">Select Drug</option>
+                        <option value="D-penicillamine" {% if form_data and form_data.Drug == 'D-penicillamine' %}selected{% endif %}>D-penicillamine</option>
+                        <option value="Placebo" {% if form_data and form_data.Drug == 'Placebo' %}selected{% endif %}>Placebo</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Age">Age (in years):</label>
+                    <input type="number" id="Age" name="Age" required value="{{ form_data.Age if form_data else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="Sex">Sex:</label>
+                    <select id="Sex" name="Sex" required>
+                        <option value="">Select Sex</option>
+                        <option value="M" {% if form_data and form_data.Sex == 'M' %}selected{% endif %}>Male</option>
+                        <option value="F" {% if form_data and form_data.Sex == 'F' %}selected{% endif %}>Female</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Ascites">Ascites:</label>
+                    <select id="Ascites" name="Ascites" required>
+                        <option value="">Select</option>
+                        <option value="Y" {% if form_data and form_data.Ascites == 'Y' %}selected{% endif %}>Yes</option>
+                        <option value="N" {% if form_data and form_data.Ascites == 'N' %}selected{% endif %}>No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Hepatomegaly">Hepatomegaly:</label>
+                    <select id="Hepatomegaly" name="Hepatomegaly" required>
+                        <option value="">Select</option>
+                        <option value="Y" {% if form_data and form_data.Hepatomegaly == 'Y' %}selected{% endif %}>Yes</option>
+                        <option value="N" {% if form_data and form_data.Hepatomegaly == 'N' %}selected{% endif %}>No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Spiders">Spiders:</label>
+                    <select id="Spiders" name="Spiders" required>
+                        <option value="">Select</option>
+                        <option value="Y" {% if form_data and form_data.Spiders == 'Y' %}selected{% endif %}>Yes</option>
+                        <option value="N" {% if form_data and form_data.Spiders == 'N' %}selected{% endif %}>No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Edema">Edema:</label>
+                    <select id="Edema" name="Edema" required>
+                        <option value="">Select</option>
+                        <option value="Y" {% if form_data and form_data.Edema == 'Y' %}selected{% endif %}>Yes</option>
+                        <option value="N" {% if form_data and form_data.Edema == 'N' %}selected{% endif %}>No</option>
+                        <option value="N/A" {% if form_data and form_data.Edema == 'N/A' %}selected{% endif %}>N/A</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Bilirubin">Bilirubin (mg/dl):</label>
+                    <input type="number" step="any" id="Bilirubin" name="Bilirubin" required value="{{ form_data.Bilirubin if form_data else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="Cholesterol">Cholesterol (mg/dl):</label>
+                    <input type="number" step="any" id="Cholesterol" name="Cholesterol" required value="{{ form_data.Cholesterol if form_data else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="Albumin">Albumin (g/dl):</label>
+                    <input type="number" step="any" id="Albumin" name="Albumin" required value="{{ form_data.Albumin if form_data else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="Copper">Copper (ug/day):</label>
+                    <input type="number" step="any" id="Copper" name="Copper" required value="{{ form_data.Copper if form_data else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="Alk_Phos">Alk_Phos (U/L):</label>
+                    <input type="number" step="any" id="Alk_Phos" name="Alk_Phos" required value="{{ form_data.Alk_Phos if form_data else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="SGOT">SGOT (U/ml):</label>
+                    <input type="number" step="any" id="SGOT" name="SGOT" required value="{{ form_data.SGOT if form_data else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="Tryglicerides">Tryglicerides (mg/dl):</label>
+                    <input type="number" step="any" id="Tryglicerides" name="Tryglicerides" required value="{{ form_data.Tryglicerides if form_data else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="Platelets">Platelets (count/ml):</label>
+                    <input type="number" step="any" id="Platelets" name="Platelets" required value="{{ form_data.Platelets if form_data else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="Prothrombin">Prothrombin (secs):</label>
+                    <input type="number" step="any" id="Prothrombin" name="Prothrombin" required value="{{ form_data.Prothrombin if form_data else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="Stage">Stage:</label>
+                    <input type="number" id="Stage" name="Stage" min="1" max="4" required value="{{ form_data.Stage if form_data else '' }}">
+                </div>
+            </div>
+
+            <button type="submit">Predict Status</button>
+        </form>
+
+        {% if prediction_text %}
+            <div class="results {{ status }}">
+                <h2>Prediction Result</h2>
+                <p>{{ prediction_text }}</p>
+                {% if probabilities %}
+                    <h3>Probabilities:</h3>
+                    <ul>
+                        {% for label, prob in probabilities.items() %}
+                            <li>{{ label.replace('Status_', '') }}: {{ prob }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

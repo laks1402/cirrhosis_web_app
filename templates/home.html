@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cirrhosis Prediction - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .home-content {
+            text-align: left;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: #5C4033;
+        }
+        .home-content h2 {
+            color: #8B4513;
+            margin-bottom: 15px;
+            font-size: 2em;
+        }
+        .home-content p {
+            margin-bottom: 10px;
+        }
+        .image-slider-container {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 2px solid #DAA520;
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+        .image-slider {
+            display: flex;
+            animation: slideAnimation 20s infinite linear;
+        }
+        .image-slider img {
+            width: 100%;
+            flex-shrink: 0;
+            height: 300px;
+            object-fit: cover;
+            margin-right: 0px;
+        }
+        @keyframes slideAnimation {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-400%); }
+        }
+        
+        .login-section {
+            border-top: 2px solid #D4AF37;
+            margin-top: 30px;
+            padding-top: 30px;
+            text-align: center;
+        }
+        .login-section h2 {
+            font-size: 1.8em;
+            color: #8B4513;
+        }
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            width: 80%;
+            max-width: 300px;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1em;
+            background-color: #FFF8DC;
+            color: #333;
+        }
+        .login-form button {
+            background-color: #D4AF37;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        .login-form button:hover {
+            background-color: #B8860B;
+        }
+        .error-message {
+            color: #F44336;
+            background-color: #FFE6E6;
+            border: 1px solid #F44336;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">
+            <img src="{{ url_for('static', filename='images/doctor_icon.png') }}" alt="Doctor Icon" class="title-icon">
+            Welcome to the Cirrhosis Prediction Tool
+        </h1>
+
+        <div class="home-content">
+            <h2>About This Tool</h2>
+            <p>This is a powerful web-based tool designed to assist in understanding the potential progression of Cirrhosis. By leveraging a machine learning model, we analyze key medical and demographic data to provide an estimated health status. This tool serves as a valuable resource for patients and healthcare professionals alike, helping to inform discussions and monitor health trends.</p>
+
+            <div class="image-slider-container">
+                <div class="image-slider">
+                    <img src="{{ url_for('static', filename='images/body.jpeg') }}" alt="Cirrhosis Image 1">
+                    <img src="{{ url_for('static', filename='images/health.jpg') }}" alt="Cirrhosis Image 2">
+                    <img src="{{ url_for('static', filename='images/Liver.jpg') }}" alt="Cirrhosis Image 3">
+                    <img src="{{ url_for('static', filename='images/sympjpg.jpg') }}" alt="Cirrhosis Image 4">
+                    <img src="{{ url_for('static', filename='images/body.jpeg') }}" alt="Cirrhosis Image 1 Duplicate">
+                    <img src="{{ url_for('static', filename='images/health.jpg') }}" alt="Cirrhosis Image 2 Duplicate">
+                    <img src="{{ url_for('static', filename='images/Liver.jpg') }}" alt="Cirrhosis Image 3 Duplicate">
+                    <img src="{{ url_for('static', filename='images/sympjpg.jpg') }}" alt="Cirrhosis Image 4 Duplicate">
+                </div>
+            </div>
+
+            <h2>How to Use</h2>
+            <ol>
+                <li>Log in using your provided credentials below to gain access to the prediction form.</li>
+                <li>Once logged in, you will be redirected to the prediction form page.</li>
+                <li>Fill in the necessary medical data accurately and click "Predict Status".</li>
+                <li>Receive a real-time prediction, including probabilities for the different health statuses.</li>
+            </ol>
+            <p style="font-style: italic;">Note: This tool is for educational and informational purposes only and is not a substitute for professional medical advice.</p>
+        </div>
+
+        <div class="login-section">
+            <h2>Login to Continue</h2>
+            {% if error %}
+                <p class="error-message">{{ error }}</p>
+            {% endif %}
+            <form action="{{ url_for('home') }}" method="post" class="login-form">
+                <input type="text" name="username" placeholder="Username" required>
+                <br>
+                <input type="password" name="password" placeholder="Password" required>
+                <br>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
